@@ -27,7 +27,11 @@ public:
 	// Modifiers
 	void push_back(T mValue);
 	void push_front(T mValue);
-	void insert(int mPosition, T mValue); // do poprawy
+	void insert(int mPosition, T mValue); 
+
+	void pop_back();
+	void pop_front(); 
+	void erese(int mPostion); 
 
 	// Capacity
 	bool empty();
@@ -116,6 +120,28 @@ inline void List<T>::insert(int mPosition, T mValue)
 	node_ptr new_node = std::make_shared<Node>(mValue, current_node, previous_node);
 	previous_node->_next = new_node;
 	current_node->_previous = new_node;
+}
+
+template<class T>
+inline void List<T>::pop_back()
+{
+	_tail = _tail->_previous;
+	_tail->_next = nullptr;
+	--_size;
+}
+
+template<class T>
+inline void List<T>::pop_front()
+{
+	_head = _head->_next;
+	_head->_previous = nullptr;
+	--_size;
+}
+
+template<class T>
+inline void List<T>::erese(int mPosition)
+{
+	// maybe later
 }
 
 template<class T>

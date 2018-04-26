@@ -34,7 +34,7 @@ public:
 	int size();
 
 	// Operations
-	void show();
+	void show(bool way = true);
 };
 
 template<class T>
@@ -131,12 +131,12 @@ inline int List<T>::size()
 }
 
 template<class T>
-inline void List<T>::show()
+inline void List<T>::show(bool way)
 {
-	auto temp_node = _head;
+	auto temp_node = way ? _head : _tail;
 	while (temp_node)
 	{
 		std::cout << temp_node->_data << std::endl;
-		temp_node = temp_node->_next;
+		temp_node = way ? temp_node->_next : temp_node->_previous;
 	}
 }

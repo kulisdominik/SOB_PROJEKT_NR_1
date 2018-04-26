@@ -11,6 +11,10 @@ int main()
 
 	std::cout << "Size: " << list.size() << std::endl;
 	std::cout << "Empty: " << list.empty() << std::endl;
+	
+	std::cout << "List_1: " << std::endl;
+	list.show(false);
+	std::cout << "List_2: " << std::endl;
 	list.show();
 	return 0;
 }

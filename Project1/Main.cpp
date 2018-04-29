@@ -68,6 +68,7 @@ int main()
 		{
 			double temp_number = std::stod(number);
 			assert(min_range < max_range);
+
 			if (min_range <= temp_number && max_range >= temp_number)
 			{
 				assert(temp_number > min_range);

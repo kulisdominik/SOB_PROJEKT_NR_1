@@ -1,5 +1,6 @@
 #include <memory>
 #include <iostream>
+#include <cassert>
 #pragma once
 template<class T> 
 class List
@@ -73,6 +74,8 @@ inline List<T>::List()
 template<class T>
 inline List<T>::List(const std::initializer_list<T> mInitializer_list)
 {
+	assert(mInitializer_list != nullptr)
+
 	for (auto& element : mInitializer_list)
 	{
 		push_back(element);
@@ -94,6 +97,9 @@ inline void List<T>::push_back(const T mValue)
 	}
 	else 
 	{
+		assert(_haed != nullptr);
+		assert(_tail != nullptr);
+
 		auto temp_node = std::make_shared<Node>(mValue, nullptr, _tail);
 		_size++;
 		_tail->_next = temp_node;
@@ -121,6 +127,9 @@ inline void List<T>::push_front(const T mValue)
 template<class T>
 inline void List<T>::insert(const int mPosition, const T mValue)
 {
+	assert(_haed != nullptr);
+	assert(_tail != nullptr);
+
 	node_ptr current_node = _head;
 	node_ptr previous_node;
 	for (int i = 1; i <= mPosition; ++i)
@@ -136,6 +145,9 @@ inline void List<T>::insert(const int mPosition, const T mValue)
 template<class T>
 inline void List<T>::pop_back()
 {
+	assert(_haed != nullptr);
+	assert(_tail != nullptr);
+
 	_tail = _tail->_previous;
 	_tail->_next = nullptr;
 	--_size;
@@ -144,6 +156,9 @@ inline void List<T>::pop_back()
 template<class T>
 inline void List<T>::pop_front()
 {
+	assert(_haed != nullptr);
+	assert(_tail != nullptr);
+
 	_head = _head->_next;
 	_head->_previous = nullptr;
 	--_size;
@@ -162,9 +177,15 @@ inline void List<T>::push(const T mValue)
 	{
 		_head = _tail = std::make_shared<Node>(mValue);
 		_size++;
+
+		assert(_head != nullptr);
+		assert(_tail != nullptr);
 	}
 	else
 	{
+		assert(_head != nullptr);
+		assert(_tail != nullptr);
+
 		node_ptr node_helper = _head;
 
 		while (node_helper)
@@ -178,15 +199,23 @@ inline void List<T>::push(const T mValue)
 				if (node_helper == _head)
 				{
 					node_ptr temp = std::make_shared<Node>(mValue, node_helper, nullptr);
+					assert(temp != nullptr);
+
 					node_helper->_previous = temp;
 					_head = temp;
+					_size++;
+
 					return;
 				}
 				else
 				{
 					node_ptr temp = std::make_shared<Node>(mValue, node_helper, node_helper->_previous);
+					assert(temp != nullptr);
+
 					node_helper->_previous->_next = temp;
 					node_helper->_previous = temp;
+					_size++;
+
 					return;
 				}
 			}
@@ -195,7 +224,11 @@ inline void List<T>::push(const T mValue)
 		if (node_helper == nullptr)
 		{
 			node_ptr temp = std::make_shared<Node>(mValue, nullptr, _tail);
+			assert(temp != nullptr);
+
 			_tail->_next = temp;
+			_size++;
+
 			_tail = temp;
 		}
 	}
@@ -204,12 +237,19 @@ inline void List<T>::push(const T mValue)
 template<class T>
 inline void List<T>::pop()
 {
-	_way ? pop_front() : pop_back();
+	if (size())
+	{
+		_size--;
+		_way ? pop_front() : pop_back();
+	}
 }
 
 template<class T>
 inline T List<T>::front()
 {
+	assert(_head != nullptr);
+	assert(_tail != nullptr);
+
 	return _way ? _head->_data : _tail->_data;
 }
 
@@ -229,6 +269,9 @@ template<class T>
 inline void List<T>::show()
 {
 	auto temp_node = _way ? _head : _tail;
+
+	assert(temp_node != nullptr);
+
 	while (temp_node)
 	{
 		std::cout << temp_node->_data << std::endl;
@@ -242,6 +285,7 @@ inline void List<T>::swap(int mSrc, int mTrg)
 	node_ptr src = nullptr, trg = nullptr;
 
 	node_ptr node_helper{ _head };
+	assert(node_helper != nulltpr);
 	int counter{ 0 };
 
 	while (node_helper)
@@ -257,6 +301,8 @@ inline void List<T>::swap(int mSrc, int mTrg)
 
 		if (trg && src)
 		{
+			assert(trg != nullptr);
+			assert(src != nullptr);
 			std::swap(src->_data, trg->_data);
 			return;
 		}
@@ -275,5 +321,13 @@ inline void List<T>::setWay(const bool mWay)
 template<class T>
 inline bool List<T>::getWay()
 {
+	if (_way)
+	{
+		std::cout << "Rosnaco" << std::endl;
+	}
+	else
+	{
+		std::cout << "Malejaco" << std::endl;
+	}
 	return _way;
 }

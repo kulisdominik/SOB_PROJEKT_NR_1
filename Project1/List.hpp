@@ -18,27 +18,38 @@ private:
 
 	node_ptr _head, _tail;
 	int _size;
+
+	bool _way = false;
 public:
 	// Member functions
 	List();
-	List(std::initializer_list<T> mInitializer_list);
+	List(const std::initializer_list<T> mInitializer_list);
 	~List();
 
-	// Modifiers
-	void push_back(T mValue);
-	void push_front(T mValue);
-	void insert(int mPosition, T mValue); 
+	// List modifiers
+	void push_back(const T mValue);
+	void push_front(const T mValue);
+	void insert(const int mPosition, const T mValue); 
 
 	void pop_back();
 	void pop_front(); 
-	void erese(int mPostion); 
+	void erese(const int mPostion); 
+
+	// Priorty queue modifiers
+	void push(const T mValue);
+	void pop();
+	T front();
 
 	// Capacity
 	bool empty();
 	int size();
 
 	// Operations
-	void show(bool way = true);
+	void show();
+	void swap(int mSrc, int mTrg);
+
+	void setWay(const bool mWay);
+	bool getWay(); 
 };
 
 template<class T>
@@ -60,7 +71,7 @@ inline List<T>::List()
 }
 
 template<class T>
-inline List<T>::List(std::initializer_list<T> mInitializer_list)
+inline List<T>::List(const std::initializer_list<T> mInitializer_list)
 {
 	for (auto& element : mInitializer_list)
 	{
@@ -74,9 +85,9 @@ inline List<T>::~List()
 }
 
 template<class T>
-inline void List<T>::push_back(T mValue)
+inline void List<T>::push_back(const T mValue)
 {
-	if (_tail == nullptr)
+	if (!size())
 	{
 		_head = _tail = std::make_shared<Node>(mValue);
 		_size++;
@@ -91,9 +102,9 @@ inline void List<T>::push_back(T mValue)
 }
 
 template<class T>
-inline void List<T>::push_front(T mValue)
+inline void List<T>::push_front(const T mValue)
 {
-	if (_head == nullptr)
+	if (!size())
 	{
 		_head = _tail = std::make_shared<Node>(mValue);
 		_size++;
@@ -108,7 +119,7 @@ inline void List<T>::push_front(T mValue)
 }
 
 template<class T>
-inline void List<T>::insert(int mPosition, T mValue)
+inline void List<T>::insert(const int mPosition, const T mValue)
 {
 	node_ptr current_node = _head;
 	node_ptr previous_node;
@@ -139,9 +150,67 @@ inline void List<T>::pop_front()
 }
 
 template<class T>
-inline void List<T>::erese(int mPosition)
+inline void List<T>::erese(const int mPosition)
 {
 	// maybe later
+}
+
+template<class T>
+inline void List<T>::push(const T mValue)
+{
+	if (!size())
+	{
+		_head = _tail = std::make_shared<Node>(mValue);
+		_size++;
+	}
+	else
+	{
+		node_ptr node_helper = _head;
+
+		while (node_helper)
+		{
+			if (node_helper->_data < mValue)
+			{
+				node_helper = node_helper->_next;
+			}
+			else
+			{
+				if (node_helper == _head)
+				{
+					node_ptr temp = std::make_shared<Node>(mValue, node_helper, nullptr);
+					node_helper->_previous = temp;
+					_head = temp;
+					return;
+				}
+				else
+				{
+					node_ptr temp = std::make_shared<Node>(mValue, node_helper, node_helper->_previous);
+					node_helper->_previous->_next = temp;
+					node_helper->_previous = temp;
+					return;
+				}
+			}
+		}
+
+		if (node_helper == nullptr)
+		{
+			node_ptr temp = std::make_shared<Node>(mValue, nullptr, _tail);
+			_tail->_next = temp;
+			_tail = temp;
+		}
+	}
+}
+
+template<class T>
+inline void List<T>::pop()
+{
+	_way ? pop_front() : pop_back();
+}
+
+template<class T>
+inline T List<T>::front()
+{
+	return _way ? _head->_data : _tail->_data;
 }
 
 template<class T>
@@ -157,12 +226,54 @@ inline int List<T>::size()
 }
 
 template<class T>
-inline void List<T>::show(bool way)
+inline void List<T>::show()
 {
-	auto temp_node = way ? _head : _tail;
+	auto temp_node = _way ? _head : _tail;
 	while (temp_node)
 	{
 		std::cout << temp_node->_data << std::endl;
-		temp_node = way ? temp_node->_next : temp_node->_previous;
+		temp_node = _way ? temp_node->_next : temp_node->_previous;
 	}
+}
+
+template<class T>
+inline void List<T>::swap(int mSrc, int mTrg)
+{
+	node_ptr src = nullptr, trg = nullptr;
+
+	node_ptr node_helper{ _head };
+	int counter{ 0 };
+
+	while (node_helper)
+	{
+		if (counter == mSrc)
+		{
+			src = node_helper;
+		}
+		else if (counter == mTrg)
+		{
+			trg = node_helper;
+		}
+
+		if (trg && src)
+		{
+			std::swap(src->_data, trg->_data);
+			return;
+		}
+		
+		++counter;
+		node_helper = node_helper->_next;
+	}
+}
+
+template<class T>
+inline void List<T>::setWay(const bool mWay)
+{
+	_way = mWay;
+}
+
+template<class T>
+inline bool List<T>::getWay()
+{
+	return _way;
 }

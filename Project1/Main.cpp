@@ -71,8 +71,8 @@ int main()
 
 			if (min_range <= temp_number && max_range >= temp_number)
 			{
-				assert(temp_number > min_range);
-				assert(temp_number < max_range);
+				assert(temp_number >= min_range);
+				assert(temp_number <= max_range);
 				list.push(temp_number);
 			}
 			

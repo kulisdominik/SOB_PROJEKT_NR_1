@@ -97,7 +97,7 @@ inline void List<T>::push_back(const T mValue)
 	}
 	else 
 	{
-		assert(_haed != nullptr);
+		assert(_head != nullptr);
 		assert(_tail != nullptr);
 
 		auto temp_node = std::make_shared<Node>(mValue, nullptr, _tail);
@@ -127,7 +127,7 @@ inline void List<T>::push_front(const T mValue)
 template<class T>
 inline void List<T>::insert(const int mPosition, const T mValue)
 {
-	assert(_haed != nullptr);
+	assert(_head != nullptr);
 	assert(_tail != nullptr);
 
 	node_ptr current_node = _head;
@@ -145,7 +145,7 @@ inline void List<T>::insert(const int mPosition, const T mValue)
 template<class T>
 inline void List<T>::pop_back()
 {
-	assert(_haed != nullptr);
+	assert(_head != nullptr);
 	assert(_tail != nullptr);
 
 	_tail = _tail->_previous;
@@ -156,7 +156,7 @@ inline void List<T>::pop_back()
 template<class T>
 inline void List<T>::pop_front()
 {
-	assert(_haed != nullptr);
+	assert(_head != nullptr);
 	assert(_tail != nullptr);
 
 	_head = _head->_next;
